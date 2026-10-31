@@ -19,7 +19,7 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.types import Command
 
 from triaje.grafo import construir_grafo
-from triaje.llm import usando_claude
+from triaje.llm import descripcion_modo
 
 load_dotenv()
 DB = "triaje.db"
@@ -62,7 +62,7 @@ def main():
     ap.add_argument("--comentario", default="")
     args = ap.parse_args()
 
-    print(f"(Modo: {'Claude' if usando_claude() else 'demo sin API key'})")
+    print(f"(Modo: {descripcion_modo()})")
     conn = sqlite3.connect(DB, check_same_thread=False)
     grafo = construir_grafo(SqliteSaver(conn))
 
