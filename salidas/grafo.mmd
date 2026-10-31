@@ -1,0 +1,37 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	clasificar(clasificar)
+	consultar_datos(consultar_datos)
+	diagnosticar(diagnosticar)
+	reiniciar_ont(reiniciar_ont)
+	decidir(decidir)
+	resolver_remoto(resolver_remoto)
+	proponer_visita(proponer_visita)
+	aprobacion_humana(aprobacion_humana)
+	crear_ot(crear_ot)
+	escalar_back_office(escalar_back_office)
+	notificar_cliente(notificar_cliente)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> clasificar;
+	aprobacion_humana -. &nbsp;aprobada&nbsp; .-> crear_ot;
+	aprobacion_humana -. &nbsp;rechazada&nbsp; .-> escalar_back_office;
+	clasificar --> consultar_datos;
+	consultar_datos --> diagnosticar;
+	crear_ot --> notificar_cliente;
+	decidir -. &nbsp;visita&nbsp; .-> proponer_visita;
+	decidir -. &nbsp;remoto&nbsp; .-> resolver_remoto;
+	diagnosticar -. &nbsp;diagnóstico completo&nbsp; .-> decidir;
+	diagnosticar -. &nbsp;ONT no responde&nbsp; .-> reiniciar_ont;
+	escalar_back_office --> notificar_cliente;
+	proponer_visita --> aprobacion_humana;
+	reiniciar_ont --> diagnosticar;
+	resolver_remoto --> notificar_cliente;
+	notificar_cliente --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

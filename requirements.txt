@@ -1,0 +1,4 @@
+langgraph>=1.2
+langgraph-checkpoint-sqlite>=3.0
+langchain-anthropic>=1.7
+python-dotenv>=1.0

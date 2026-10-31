@@ -1,0 +1,62 @@
+Modo: demo sin API key
+
+
+======================================================================
+ESCENARIO 1: Lentitud: se resuelve en remoto
+Entrada: Cliente C-1001: dice que internet le va muy lento por las noches, sobre todo en el salón.
+
+  [clasificar] C-1001 · lentitud · urgencia media
+  [consultar] Laura Gómez (Residencial, Madrid Norte) · 0 OTs en 30 días
+  [diagnosticar] {'ont_responde': True, 'potencia_optica_dbm': -19.5, 'wifi_canal_saturado': True}
+  [decidir] REMOTO: Línea correcta; el problema es el wifi saturado
+  [resolver_remoto] Resuelto sin desplazamiento
+  [notificar] Mensaje al cliente redactado
+
+  Mensaje al cliente: Hola Laura: Hemos detectado interferencias en tu wifi y lo hemos cambiado de canal en remoto. Debería ir mejor ya. Gracias por tu paciencia. Soporte Fibra
+
+======================================================================
+ESCENARIO 2: Sin conexión: el agente reinicia y vuelve a diagnosticar (bucle)
+Entrada: C-1003 llama porque no tengo conexión desde esta mañana.
+
+  [clasificar] C-1003 · sin_servicio · urgencia alta
+  [consultar] Javier Martín (Residencial, Alcorcón) · 1 OT en 30 días
+  [diagnosticar] {'ont_responde': False}
+  [reiniciar] Orden de reinicio enviada a la ONT de C-1003
+  [diagnosticar] {'ont_responde': True, 'potencia_optica_dbm': -20.1}
+  [decidir] REMOTO: Línea correcta tras el diagnóstico
+  [resolver_remoto] Resuelto sin desplazamiento
+  [notificar] Mensaje al cliente redactado
+
+  Mensaje al cliente: Hola Javier: Hemos reiniciado tu router en remoto y la conexión ya está restablecida. Gracias por tu paciencia. Soporte Fibra
+
+======================================================================
+ESCENARIO 3: Avería física: propone técnico y el back office aprueba
+Entrada: Talleres Hermanos Ruiz (C-1002): sin internet desde ayer, la ONT tiene la luz LOS en rojo.
+
+  [clasificar] C-1002 · sin_servicio · urgencia alta
+  [consultar] Talleres Hermanos Ruiz (Pyme, Getafe) · 0 OTs en 30 días
+  [diagnosticar] {'ont_responde': True, 'potencia_optica_dbm': None, 'alarma': 'LOS'}
+  [decidir] VISITA: Sin señal óptica (LOS): avería física en la acometida
+  [proponer_visita] Sergio · Hoy 16:00 · 1 alerta
+  ⏸  PAUSA. El grafo espera a una persona. Propuesta: {'cliente': 'Talleres Hermanos Ruiz (C-1002)', 'motivo': 'Sin señal óptica (LOS): avería física en la acometida', 'urgencia': 'alta', 'tecnico': {'id': 'T-07', 'nombre': 'Sergio', 'hueco': 'Hoy 16:00'}, 'alertas': ['Pyme: impacto en su negocio.']}
+  [aprobacion_humana] APROBADA
+  [crear_ot] OT-4811 creada
+  [notificar] Mensaje al cliente redactado
+
+  Mensaje al cliente: Estimado cliente (Talleres Hermanos Ruiz): Hemos programado la visita de un técnico (Sergio) para hoy 16:00. Referencia OT-4811. Gracias por su paciencia. Soporte Fibra
+
+======================================================================
+ESCENARIO 4: Cliente reincidente: el back office rechaza y escala
+Entrada: Clínica Dental Sonrisas, cliente C-1004: otra vez sin servicio, no funciona nada.
+
+  [clasificar] C-1004 · sin_servicio · urgencia alta
+  [consultar] Clínica Dental Sonrisas (Pyme, Getafe) · 2 OTs en 30 días
+  [diagnosticar] {'ont_responde': True, 'potencia_optica_dbm': -28.7, 'alarma': 'Potencia baja'}
+  [decidir] VISITA: Potencia óptica baja (-28.7 dBm)
+  [proponer_visita] Sergio · Hoy 16:00 · 2 alertas
+  ⏸  PAUSA. El grafo espera a una persona. Propuesta: {'cliente': 'Clínica Dental Sonrisas (C-1004)', 'motivo': 'Potencia óptica baja (-28.7 dBm)', 'urgencia': 'alta', 'tecnico': {'id': 'T-07', 'nombre': 'Sergio', 'hueco': 'Hoy 16:00'}, 'alertas': ['Cliente reincidente: 2 visitas en 30 días. Valorar escalar a ingeniería.', 'Pyme: impacto en su negocio.']}
+  [aprobacion_humana] RECHAZADA · "Tercera visita en un mes: que lo mire ingeniería antes de mandar a nadie"
+  [escalar] Derivado a revisión manual (Tercera visita en un mes: que lo mire ingeniería antes de mandar a nadie)
+  [notificar] Mensaje al cliente redactado
+
+  Mensaje al cliente: Estimado cliente (Clínica Dental Sonrisas): Un compañero de soporte está revisando su caso y le llamará hoy. Gracias por su paciencia. Soporte Fibra

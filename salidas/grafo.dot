@@ -1,0 +1,43 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.6", nodesep="0.6", ranksep="0.6", label=<<TABLE BORDER="0" CELLSPACING="0"><TR><TD><FONT POINT-SIZE="26" FACE="Helvetica-Bold">Agente de triaje de OTs · LangGraph</FONT></TD></TR><TR><TD HEIGHT="10"></TD></TR><TR><TD><TABLE BORDER="0" CELLSPACING="0"><TR><TD BGCOLOR="#EDE7F6" COLOR="#5E35B1" BORDER="2" STYLE="rounded" CELLPADDING="6">Modelo de lenguaje</TD><TD WIDTH="14"></TD><TD BGCOLOR="#E3F2FD" COLOR="#1E88E5" BORDER="2" STYLE="rounded" CELLPADDING="6">Consulta / acción en sistemas</TD><TD WIDTH="14"></TD><TD BGCOLOR="#FFF8E1" COLOR="#F9A825" BORDER="2" STYLE="rounded" CELLPADDING="6">Reglas de negocio</TD><TD WIDTH="14"></TD><TD BGCOLOR="#FFE0B2" COLOR="#EF6C00" BORDER="2" STYLE="rounded" CELLPADDING="6">Persona</TD><TD WIDTH="14"></TD></TR></TABLE></TD></TR><TR><TD HEIGHT="16"></TD></TR></TABLE>>, labelloc=t, fontname="Helvetica", fontsize=14];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=13, penwidth=2, margin="0.2,0.1"];
+  edge [fontname="Helvetica", fontsize=11, color="#546E7A", penwidth=1.4, arrowsize=0.8];
+  "__start__" [label="Llega la incidencia", fillcolor="#ECEFF1", color="#78909C", shape=ellipse];
+  "clasificar" [label="Clasificar
+(LLM)", fillcolor="#EDE7F6", color="#5E35B1"];
+  "consultar_datos" [label="Consultar cliente
+e histórico", fillcolor="#E3F2FD", color="#1E88E5"];
+  "diagnosticar" [label="Diagnosticar ONT", fillcolor="#E3F2FD", color="#1E88E5"];
+  "reiniciar_ont" [label="Reiniciar ONT
+en remoto", fillcolor="#E3F2FD", color="#1E88E5"];
+  "decidir" [label="Decidir ruta
+(reglas)", fillcolor="#FFF8E1", color="#F9A825", shape=diamond, margin="0.05"];
+  "resolver_remoto" [label="Resolver
+en remoto", fillcolor="#FFF8E1", color="#F9A825"];
+  "proponer_visita" [label="Proponer técnico
+y hueco", fillcolor="#FFF8E1", color="#F9A825"];
+  "aprobacion_humana" [label="Aprobación
+back office
+(el agente espera)", fillcolor="#FFE0B2", color="#EF6C00"];
+  "crear_ot" [label="Crear OT", fillcolor="#E3F2FD", color="#1E88E5"];
+  "escalar_back_office" [label="Escalar a
+revisión manual", fillcolor="#FFF8E1", color="#F9A825"];
+  "notificar_cliente" [label="Mensaje al cliente
+(LLM)", fillcolor="#EDE7F6", color="#5E35B1"];
+  "__end__" [label="Fin", fillcolor="#ECEFF1", color="#78909C", shape=ellipse];
+  "__start__" -> "clasificar" [];
+  "aprobacion_humana" -> "crear_ot" [label=" aprobada ", fontcolor="#37474F", style=dashed];
+  "aprobacion_humana" -> "escalar_back_office" [label=" rechazada ", fontcolor="#37474F", style=dashed];
+  "clasificar" -> "consultar_datos" [];
+  "consultar_datos" -> "diagnosticar" [];
+  "crear_ot" -> "notificar_cliente" [];
+  "decidir" -> "proponer_visita" [label=" visita ", fontcolor="#37474F", style=dashed];
+  "decidir" -> "resolver_remoto" [label=" remoto ", fontcolor="#37474F", style=dashed];
+  "diagnosticar" -> "decidir" [label=" diagnóstico completo ", fontcolor="#37474F", style=dashed];
+  "diagnosticar" -> "reiniciar_ont" [label=" ONT no responde ", fontcolor="#37474F", style=dashed];
+  "escalar_back_office" -> "notificar_cliente" [];
+  "proponer_visita" -> "aprobacion_humana" [];
+  "reiniciar_ont" -> "diagnosticar" [color="#1E88E5", fontcolor="#1E88E5", label=" reintenta ", tailport=n, headport=n];
+  "resolver_remoto" -> "notificar_cliente" [];
+  "notificar_cliente" -> "__end__" [];
+}
