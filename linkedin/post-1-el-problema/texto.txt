@@ -1,0 +1,25 @@
+"Sin internet desde ayer, la ONT tiene la luz LOS en rojo."
+
+Esa frase llegó a mi agente de IA. En 3 segundos la había entendido, había diagnosticado la línea y proponía un técnico para esa tarde. Después se paró a esperar a que una persona lo aprobara.
+
+Así llegan muchas incidencias a un back office de operaciones de campo. Y detrás de cada una, las mismas preguntas:
+
+¿Quién es el cliente? ¿Ha tenido averías recientes? ¿Se arregla en remoto o hay que mandar a alguien? ¿Quién está libre en esa zona?
+
+Responderlas a mano es saltar entre tres o cuatro sistemas. Multiplícalo por cientos de incidencias al día.
+
+La tentación es poner un chatbot y que "la IA decida". Pero contestar no basta: hay que consultar datos, probar cosas, decidir y, a veces, pedir permiso antes de actuar.
+
+Eso es un agente. He construido uno, pequeño pero real, y lo voy a contar aquí en 6 posts.
+
+Lo que hace: clasifica la incidencia, consulta el histórico, diagnostica la línea, intenta resolver en remoto y, si hace falta un técnico, se lo propone al back office y espera su aprobación.
+
+Está hecho con LangGraph y datos inventados: clientes, técnicos y OTs. Así puedo enseñarlo todo sin exponer a nadie.
+
+No soy desarrollador. Llevo casi 10 años en operaciones, primero como auditor y ahora como project manager. Precisamente por eso me interesa: quiero separar el humo de lo que funciona.
+
+Próximo post: qué es LangGraph, sin jerga.
+
+¿Cuánto tiempo se va en tu equipo en triar incidencias?
+
+#IA #AgentesIA #FieldService #Operaciones #LangGraph

@@ -1,0 +1,3 @@
+Para los que preguntáis cómo se ve por dentro: esta es la traza de ese mismo caso en LangSmith, la herramienta que registra cada paso del agente.
+
+Las 2 llamadas a la IA se llevan el 97% del tiempo y todos los tokens. Las consultas y las reglas tardan 4 ms en total (están simuladas; con sistemas reales tardarían más, pero siguen sin costar tokens).

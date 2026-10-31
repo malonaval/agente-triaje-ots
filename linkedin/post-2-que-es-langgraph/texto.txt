@@ -1,0 +1,23 @@
+Si alguna vez has dibujado un diagrama de flujo de un proceso, ya entiendes LangGraph.
+
+En el vídeo, una incidencia real ("internet me va muy lento por las noches") recorre el diagrama caja a caja hasta que el cliente recibe un SMS. Ese diagrama no es una presentación: es el programa.
+
+LangGraph es una librería de Python, open source, de los creadores de LangChain. Sirve para construir agentes de IA como si fueran diagramas de flujo. Tiene tres piezas:
+
+1. El estado. Una ficha compartida que viaja por todo el proceso: el texto de la incidencia, el cliente, el diagnóstico, la decisión y el mensaje final. Cada paso lee la ficha y añade lo suyo.
+2. Los nodos. Cada caja. Puede ser una llamada a un modelo de IA, una consulta a un sistema o una regla de negocio. Para el programa, todas son funciones normales.
+3. Las aristas. Las flechas. Algunas son fijas ("después de consultar, diagnostica") y otras son decisiones ("si la ONT no responde, reinicia; si responde, decide").
+
+¿Qué aporta frente a encadenar llamadas a una IA?
+
+• Bucles: el agente puede reintentar. Reinicia el router y vuelve a diagnosticar.
+• Pausas: puede pararse y esperar a que una persona apruebe algo.
+• Memoria: guarda la ficha en cada paso. Un caso pausado se retoma horas después.
+
+Para alguien de operaciones, lo más valioso es otra cosa: el proceso se ve. Y el dibujo se comprueba contra el código: si cambio el agente y no el diagrama, el script que lo genera da error.
+
+Eso cambia la conversación con negocio. En vez de "la IA hace cosas", hablamos de cajas, flechas y dónde decide quién.
+
+Próximo post: cómo diseñé este grafo antes de escribir una línea de código.
+
+#IA #LangGraph #AgentesIA #Operaciones
