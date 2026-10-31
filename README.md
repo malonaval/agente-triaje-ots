@@ -26,7 +26,14 @@ python -m venv .venv && source .venv/bin/activate   # en Windows: .venv\Scripts\
 pip install -r requirements.txt
 ```
 
-**Sin API key** funciona en "modo demo" (reglas simples en lugar del LLM). Para usar Claude, copia `.env.example` a `.env` y pon tu clave de Anthropic.
+**Sin API key** funciona en "modo demo" (reglas simples en lugar del LLM). Para usar un LLM, copia `.env.example` a `.env` y pon una de estas claves:
+
+- `ANTHROPIC_API_KEY`: usa Claude.
+- `GROQ_API_KEY`: usa un modelo abierto en [Groq](https://console.groq.com/keys), que tiene capa gratuita (por defecto `openai/gpt-oss-120b`, cambiable con `MODELO_GROQ`).
+
+Si hay ambas se usa Claude; para elegir a mano, `PROVEEDOR_LLM=groq` (o `anthropic`, `demo`).
+
+**Ver cada ejecución en LangSmith (opcional).** Añade `LANGSMITH_TRACING=true`, `LANGSMITH_API_KEY` y `LANGSMITH_PROJECT` al `.env` (están comentadas en `.env.example`). Sin tocar el código, LangGraph envía cada caso a [LangSmith](https://smith.langchain.com) como una traza: los 11 nodos, el estado que entra y sale de cada uno, el prompt y la respuesta del LLM, los tokens y los tiempos.
 
 ```bash
 # Los 4 escenarios de ejemplo de principio a fin (guarda la traza en salidas/trazas.txt)
@@ -59,7 +66,7 @@ python diagrama.py
 triaje/
   datos.py         datos sintéticos (clientes, histórico, red, técnicos)
   herramientas.py  funciones que simulan los sistemas (CRM, red, planificador)
-  llm.py           clasificación y redacción con Claude, o modo demo
+  llm.py           clasificación y redacción con Claude o Groq, o modo demo
   grafo.py         estado, nodos, aristas y construcción del grafo
 main.py            uso interactivo y pausa/reanudación
 demo.py            ejecuta los 4 escenarios

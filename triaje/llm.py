@@ -6,9 +6,11 @@ Las dos tareas donde usamos un modelo de lenguaje:
 Todo lo demás (consultar datos, decidir la ruta) son reglas y código normal.
 Eso es intencionado: el LLM se usa donde aporta, no en todas partes.
 
-Si hay ANTHROPIC_API_KEY en el entorno, se usa Claude.
-Si no, se usa un "modo demo" con reglas simples para que el ejemplo
-se pueda ejecutar sin coste ni cuenta.
+Proveedor del LLM (por orden de preferencia):
+  - ANTHROPIC_API_KEY en el entorno -> Claude.
+  - GROQ_API_KEY en el entorno      -> modelo abierto en Groq (tiene capa gratuita).
+  - Ninguna                         -> "modo demo" con reglas simples, sin coste ni cuenta.
+Se puede forzar con PROVEEDOR_LLM=anthropic|groq|demo.
 """
 
 import os
@@ -17,7 +19,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-MODELO = os.getenv("MODELO_CLAUDE", "claude-sonnet-5-5")
+MODELO_CLAUDE = os.getenv("MODELO_CLAUDE", "claude-sonnet-5-5")
+MODELO_GROQ = os.getenv("MODELO_GROQ", "openai/gpt-oss-120b")
 
 
 class Clasificacion(BaseModel):
@@ -27,13 +30,36 @@ class Clasificacion(BaseModel):
     resumen: str = Field(description="Resumen de la incidencia en una frase")
 
 
-def usando_claude() -> bool:
-    return bool(os.getenv("ANTHROPIC_API_KEY"))
+def proveedor() -> str:
+    """Devuelve "anthropic", "groq" o "demo"."""
+    forzado = os.getenv("PROVEEDOR_LLM", "").strip().lower()
+    if forzado in ("anthropic", "groq", "demo"):
+        return forzado
+    if os.getenv("ANTHROPIC_API_KEY"):
+        return "anthropic"
+    if os.getenv("GROQ_API_KEY"):
+        return "groq"
+    return "demo"
+
+
+def usando_llm() -> bool:
+    return proveedor() != "demo"
+
+
+def descripcion_modo() -> str:
+    return {
+        "anthropic": f"Claude ({MODELO_CLAUDE})",
+        "groq": f"Groq ({MODELO_GROQ})",
+        "demo": "demo sin API key",
+    }[proveedor()]
 
 
 def _llm():
+    if proveedor() == "groq":
+        from langchain_groq import ChatGroq
+        return ChatGroq(model=MODELO_GROQ, temperature=0)
     from langchain_anthropic import ChatAnthropic
-    return ChatAnthropic(model=MODELO, temperature=0)
+    return ChatAnthropic(model=MODELO_CLAUDE, temperature=0)
 
 
 # ---------- 1. Clasificar la incidencia ----------
@@ -48,7 +74,7 @@ Incidencia:
 
 
 def clasificar(texto: str) -> Clasificacion:
-    if usando_claude():
+    if usando_llm():
         return _llm().with_structured_output(Clasificacion).invoke(PROMPT_CLASIFICAR.format(texto=texto))
     return _clasificar_demo(texto)
 
@@ -77,7 +103,7 @@ No prometas nada que no esté en la situación. Firma como "Soporte Fibra"."""
 
 
 def redactar_mensaje(nombre: str, segmento: str, situacion: str) -> str:
-    if usando_claude():
+    if usando_llm():
         return _llm().invoke(PROMPT_MENSAJE.format(nombre=nombre, segmento=segmento, situacion=situacion)).content
     if segmento == "Residencial":
         return f"Hola {nombre.split()[0]}: {situacion} Gracias por tu paciencia. Soporte Fibra"

@@ -12,7 +12,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.types import Command
 
 from triaje.grafo import construir_grafo
-from triaje.llm import usando_claude
+from triaje.llm import descripcion_modo
 
 load_dotenv()
 
@@ -34,7 +34,7 @@ ESCENARIOS = [
 
 def main():
     grafo = construir_grafo(InMemorySaver())
-    salida = [f"Modo: {'Claude' if usando_claude() else 'demo sin API key'}\n"]
+    salida = [f"Modo: {descripcion_modo()}\n"]
 
     for i, (titulo, texto, decision_humana) in enumerate(ESCENARIOS, 1):
         config = {"configurable": {"thread_id": f"demo-{i}"}}
