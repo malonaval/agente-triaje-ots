@@ -33,6 +33,8 @@ pip install -r requirements.txt
 
 Si hay ambas se usa Claude; para elegir a mano, `PROVEEDOR_LLM=groq` (o `anthropic`, `demo`).
 
+**Ver cada ejecución en LangSmith (opcional).** Añade `LANGSMITH_TRACING=true`, `LANGSMITH_API_KEY` y `LANGSMITH_PROJECT` al `.env` (están comentadas en `.env.example`). Sin tocar el código, LangGraph envía cada caso a [LangSmith](https://smith.langchain.com) como una traza: los 11 nodos, el estado que entra y sale de cada uno, el prompt y la respuesta del LLM, los tokens y los tiempos.
+
 ```bash
 # Los 4 escenarios de ejemplo de principio a fin (guarda la traza en salidas/trazas.txt)
 python demo.py
