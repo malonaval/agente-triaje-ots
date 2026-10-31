@@ -20,7 +20,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 MODELO_CLAUDE = os.getenv("MODELO_CLAUDE", "claude-sonnet-5-5")
-MODELO_GROQ = os.getenv("MODELO_GROQ", "llama-3.3-70b-versatile")
+MODELO_GROQ = os.getenv("MODELO_GROQ", "openai/gpt-oss-120b")
 
 
 class Clasificacion(BaseModel):

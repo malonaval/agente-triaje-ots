@@ -29,7 +29,7 @@ pip install -r requirements.txt
 **Sin API key** funciona en "modo demo" (reglas simples en lugar del LLM). Para usar un LLM, copia `.env.example` a `.env` y pon una de estas claves:
 
 - `ANTHROPIC_API_KEY`: usa Claude.
-- `GROQ_API_KEY`: usa un modelo abierto en [Groq](https://console.groq.com/keys), que tiene capa gratuita (por defecto `llama-3.3-70b-versatile`, cambiable con `MODELO_GROQ`).
+- `GROQ_API_KEY`: usa un modelo abierto en [Groq](https://console.groq.com/keys), que tiene capa gratuita (por defecto `openai/gpt-oss-120b`, cambiable con `MODELO_GROQ`).
 
 Si hay ambas se usa Claude; para elegir a mano, `PROVEEDOR_LLM=groq` (o `anthropic`, `demo`).
 
